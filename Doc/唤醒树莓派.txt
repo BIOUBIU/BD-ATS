@@ -26,4 +26,5 @@ Params: gpio_pin                GPIO pin to trigger on (default 3)
         gpio_pull               Desired pull-up/down state (off, down, up)
                                 Default is "up".
  
-                                Note that the defa
+                                Note that the default pin (GPIO3) has an
+                                external pullup.
