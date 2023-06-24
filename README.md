@@ -14,6 +14,7 @@
 - gr-gpredict-doppler-3.8（doppler在安装时报错）
 - gr-osmosdr
 - dogtail（用于GUI的自动化）
+- gr-satellites（用于解码遥测）
 - OpenATS（学习并参考了大佬代码、尤其是步进电机的控制）
 - 还参考了哈工大紫丁香2号卫星的live CD
 
@@ -34,4 +35,5 @@
     > - 安装dogtail进行GUI自动化
 3. yhz：学习编写树莓派端代码
     > 需要涉及GNU Radio、串口操作、GUI自动化、文件操作等等（头已经大了）
+    > 后期还要有报错（raise）
 4. **gwc快来写代码！！！（北斗操作，步进电机）**
