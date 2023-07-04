@@ -18,7 +18,7 @@
 
 e.g., 
 
-    TSK, WAWAROUSat, FM, 114514, 202306232200<LF>
+    TSK, WAWAROUSat, FM, USB, 114514, 202306232200<LF>
 
 ## **INF指令**
     

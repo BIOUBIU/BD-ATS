@@ -11,13 +11,14 @@ buf = 'buf'
 bufList = ['0']
 
 def setupSerial():
-    global serCmd, serUSB
+    global serCmd#, serUSB
     while not serCmd.is_open():
         pass
+'''    
     while not serUSB.is_open():
         pass
     return
-
+'''
 ##############################
 def setupGPredict():
     return
@@ -29,7 +30,7 @@ def taskArrange(satName, mode, freq, time):
     @描述:通过REP语句向北斗上位机请求任务语句
 """
 def REPTaskRequest():
-    global serCmd, serUSB, buf, bufList
+    global serCmd, buf, bufList #, serUSB
     serCmd.write(b"REP,taskRequest\n")
     if(serCmd.inWaiting() != 0):
         buf = serCmd.read_until()
@@ -46,7 +47,10 @@ if __name__ == '__main__':
     try:
         setupSerial()
         #REPTaskRequest()
-        
+        while True:
+            if (serCmd.in_waiting() != 0):
+                serCmd
+
     except KeyboardInterrupt:
         destory()
 
