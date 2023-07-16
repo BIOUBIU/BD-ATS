@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: GPL-3.0
 #
 # GNU Radio Python Flow Graph
-# Title: Not titled yet
+# Title: NBFM
 # Author: bd-ats
 # GNU Radio version: 3.10.1.1
 
