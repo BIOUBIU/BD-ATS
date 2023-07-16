@@ -28,3 +28,4 @@ Params: gpio_pin                GPIO pin to trigger on (default 3)
  
                                 Note that the default pin (GPIO3) has an
                                 external pullup.
+

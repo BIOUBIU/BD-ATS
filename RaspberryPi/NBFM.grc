@@ -1,6 +1,6 @@
 options:
   parameters:
-    author: ''
+    author: bd-ats
     catch_exceptions: 'True'
     category: '[GRC Hier Blocks]'
     cmake_opt: ''
@@ -11,7 +11,7 @@ options:
     gen_linking: dynamic
     generate_options: qt_gui
     hier_block_src_path: '.:'
-    id: untitled
+    id: NBFM
     max_nouts: '0'
     output_language: python
     placement: (0,0)
@@ -22,7 +22,7 @@ options:
     run_options: prompt
     sizing_mode: fixed
     thread_safe_setters: ''
-    title: ''
+    title: Not titled yet
     window_size: (1000,1000)
   states:
     bus_sink: false
@@ -33,35 +33,35 @@ options:
     state: enabled
 
 blocks:
+- name: doppler_start_time
+  id: variable
+  parameters:
+    comment: ''
+    value: '1689516592'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [416, 24.0]
+    rotation: 0
+    state: true
 - name: freq
   id: variable
   parameters:
     comment: ''
-    value: '145800000'
+    value: '145955000'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [304, 16.0]
-    rotation: 0
-    state: true
-- name: fsk_deviation_hz
-  id: variable
-  parameters:
-    comment: ''
-    value: '3997.3'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [960, 96.0]
+    coordinate: [288, 16.0]
     rotation: 0
     state: true
 - name: samp_rate
   id: variable
   parameters:
     comment: ''
-    value: '5000000'
+    value: '576000'
   states:
     bus_sink: false
     bus_source: false
@@ -69,126 +69,101 @@ blocks:
     coordinate: [184, 12]
     rotation: 0
     state: enabled
-- name: tap1
-  id: variable_low_pass_filter_taps
+- name: variable_band_pass_filter_taps_0
+  id: variable_band_pass_filter_taps
   parameters:
     beta: '6.76'
     comment: ''
-    cutoff_freq: '20000'
     gain: '1.0'
+    high_cutoff_freq: '10000'
+    low_cutoff_freq: '-10000'
     samp_rate: samp_rate
-    width: '60000'
+    type: complex_band_pass
+    width: '200'
     win: window.WIN_HAMMING
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [592, 48.0]
+    coordinate: [568, 48.0]
     rotation: 0
     state: true
-- name: analog_quadrature_demod_cf_0
-  id: analog_quadrature_demod_cf
+- name: analog_nbfm_rx_0
+  id: analog_nbfm_rx
   parameters:
     affinity: ''
     alias: ''
+    audio_rate: '48000'
     comment: ''
-    gain: samp_rate/(2*math.pi*fsk_deviation_hz)
+    max_dev: 5e3
     maxoutbuf: '0'
     minoutbuf: '0'
+    quad_rate: '192000'
+    tau: 75e-6
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [824, 344.0]
+    coordinate: [880, 196.0]
     rotation: 0
     state: true
-- name: blocks_file_sink_0
-  id: blocks_file_sink
+- name: analog_simple_squelch_cc_0
+  id: analog_simple_squelch_cc
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: '1'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    threshold: '-50'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [896, 376.0]
+    rotation: 0
+    state: true
+- name: blocks_wavfile_sink_0
+  id: blocks_wavfile_sink
   parameters:
     affinity: ''
     alias: ''
     append: 'False'
+    bits_per_sample1: FORMAT_PCM_16
+    bits_per_sample2: FORMAT_PCM_16
+    bits_per_sample3: FORMAT_VORBIS
+    bits_per_sample4: FORMAT_PCM_16
     comment: ''
-    file: /home/bd-ats/radio/111
-    type: complex
-    unbuffered: 'False'
-    vlen: '1'
+    file: /home/bd-ats/radio/recording/recording.wav
+    format: FORMAT_WAV
+    nchan: '1'
+    samp_rate: '48000'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1432, 488.0]
+    coordinate: [1184, 248.0]
     rotation: 0
     state: true
-- name: digital_binary_slicer_fb_0
-  id: digital_binary_slicer_fb
+- name: fft_filter_xxx_0
+  id: fft_filter_xxx
   parameters:
     affinity: ''
     alias: ''
     comment: ''
+    decim: '3'
     maxoutbuf: '0'
     minoutbuf: '0'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1392, 336.0]
-    rotation: 0
-    state: true
-- name: digital_clock_recovery_mm_xx_0
-  id: digital_clock_recovery_mm_xx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    gain_mu: '0.175'
-    gain_omega: 7.65625m
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    mu: '0.5'
-    omega: '13.0208'
-    omega_relative_limit: '0.005'
-    type: complex
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1080, 284.0]
-    rotation: 0
-    state: true
-- name: freq_xlating_fir_filter_xxx_0
-  id: freq_xlating_fir_filter_xxx
-  parameters:
-    affinity: ''
-    alias: ''
-    center_freq: '100000'
-    comment: ''
-    decim: '40'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    samp_rate: samp_rate
-    taps: tap1
+    nthreads: '1'
+    samp_delay: '0'
+    taps: variable_band_pass_filter_taps_0
     type: ccc
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [528, 304.0]
-    rotation: 0
-    state: true
-- name: gpredict_doppler_0
-  id: gpredict_doppler
-  parameters:
-    alias: ''
-    comment: ''
-    gpredict_host: localhost
-    gpredict_port: '4532'
-    target: freq
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [416, 60.0]
+    coordinate: [584, 308.0]
     rotation: 0
     state: true
 - name: rtlsdr_source_0
@@ -229,7 +204,7 @@ blocks:
     ant8: ''
     ant9: ''
     args: '""'
-    bb_gain0: '14.5'
+    bb_gain0: '20'
     bb_gain1: '20'
     bb_gain10: '20'
     bb_gain11: '20'
@@ -261,7 +236,7 @@ blocks:
     bb_gain7: '20'
     bb_gain8: '20'
     bb_gain9: '20'
-    bw0: '5000000'
+    bw0: '0'
     bw1: '0'
     bw10: '0'
     bw11: '0'
@@ -398,7 +373,7 @@ blocks:
     freq7: 100e6
     freq8: 100e6
     freq9: 100e6
-    gain0: '16'
+    gain0: '10'
     gain1: '10'
     gain10: '10'
     gain11: '10'
@@ -545,34 +520,34 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [96, 188.0]
+    coordinate: [112, 208.0]
     rotation: 0
     state: true
-- name: satellites_ax25_deframer_0
-  id: satellites_ax25_deframer
+- name: satellites_doppler_correction_0
+  id: satellites_doppler_correction
   parameters:
     affinity: ''
     alias: ''
     comment: ''
-    g3ruh_scrambler: 'True'
+    file: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    options: '""'
+    samp_rate: samp_rate
+    t0: doppler_start_time
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1208, 504.0]
+    coordinate: [368, 316.0]
     rotation: 0
     state: true
 
 connections:
-- [analog_quadrature_demod_cf_0, '0', digital_clock_recovery_mm_xx_0, '0']
-- [digital_binary_slicer_fb_0, '0', satellites_ax25_deframer_0, '0']
-- [digital_clock_recovery_mm_xx_0, '0', digital_binary_slicer_fb_0, '0']
-- [freq_xlating_fir_filter_xxx_0, '0', analog_quadrature_demod_cf_0, '0']
-- [rtlsdr_source_0, '0', freq_xlating_fir_filter_xxx_0, '0']
-- [satellites_ax25_deframer_0, out, blocks_file_sink_0, '0']
+- [analog_nbfm_rx_0, '0', blocks_wavfile_sink_0, '0']
+- [analog_simple_squelch_cc_0, '0', analog_nbfm_rx_0, '0']
+- [fft_filter_xxx_0, '0', analog_simple_squelch_cc_0, '0']
+- [rtlsdr_source_0, '0', satellites_doppler_correction_0, '0']
+- [satellites_doppler_correction_0, '0', fft_filter_xxx_0, '0']
 
 metadata:
   file_format: 1
