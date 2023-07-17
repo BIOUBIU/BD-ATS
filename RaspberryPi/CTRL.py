@@ -23,7 +23,7 @@ def setupSerial():
         pass
     return
 
-#创建多普勒文件，用以修正多普勒，从predict的stdout中读数据并写入一个txt
+#创建多普勒文件，用以修正多普勒，从predict的stdout中读数据并写入一个txt,返回开始的unix时间戳用于输给GR
 def createDoppler(satName, freq, startTime):
     #os.remove("doppler.txt")
     cmd = "predict -dp " + satName + startTime
@@ -46,7 +46,7 @@ def createDoppler(satName, freq, startTime):
             oneLine = timeStamp + ' ' + dopplerStr
             dp.write(oneLine)
     return unixStartTime
-    
+
 def taskArrange(satName, mode, freq, startTime, endTime):
     cmd1 = "predict -a /dev/ttyAMA2"
     predict = subprocess.Popen(args = cmd1, shell = True,stdin = subprocess.PIPE, stdout = subprocess.PIPE)
