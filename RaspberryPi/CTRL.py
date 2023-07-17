@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*
 import serial
 import time
+import datetime
 import RPi.GPIO as GPIO
 import os
 import WBFM
@@ -48,8 +49,12 @@ def createDoppler(satName, freq, startTime):
     return unixStartTime
 
 def taskArrange(satName, mode, freq, startTime, endTime):
-    
-    unixST4dp = createDoppler(satName, freq, startTime) #给多普勒修正用的unix开始时间戳
+    st = datetime.datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S")
+    unixST = st.timestamp()
+    et = datetime.datetime.strptime(endTime, "%Y-%m-%d %H:%M:%S")
+    unixET = et.timestamp()
+    unixSTstr = str(unixST)
+    unixST4dp = createDoppler(satName, freq, unixSTstr) #给多普勒修正用的unix开始时间戳
     cmd1 = "predict -a /dev/ttyAMA2"
     predict = subprocess.Popen(args = cmd1, shell = True,stdin = subprocess.PIPE, stdout = subprocess.PIPE)
     predict.wait(5)
