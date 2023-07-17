@@ -7,7 +7,7 @@ import os
 import WBFM
 import NBFM
 import subprocess
-
+import numpy as np
 
 serCmd = serial.Serial("/dev/ttyAMA1", 9600, timeout = 10)
 serUSB = serial.Serial("/dev/ttyUSB0", 9600, timeout = 10)#######################
@@ -48,16 +48,24 @@ def createDoppler(satName, freq, startTime):
     return unixStartTime
 
 def taskArrange(satName, mode, freq, startTime, endTime):
+    
+    unixST4dp = createDoppler(satName, freq, startTime) #给多普勒修正用的unix开始时间戳
     cmd1 = "predict -a /dev/ttyAMA2"
     predict = subprocess.Popen(args = cmd1, shell = True,stdin = subprocess.PIPE, stdout = subprocess.PIPE)
+    predict.wait(5)
+    predict.communicate('T')
+    satlist = np.load('/radio/SatList.npy').item()
+    predict.communicate(satlist[satName])
+
     return
 
 def tleStorage(satName, tleLn1, tleLn2):
     return
 
 def timeCorrection(time):
-    cmd = "date " + time
+    cmd = "date -s '%s'" % (time)
     os.system(cmd)
+    os.system('hwclock -w')
     return
 
 def info():#######################
