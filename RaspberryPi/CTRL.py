@@ -86,6 +86,16 @@ def task(satName, mode, sideband, freq, startTime, endTime):
     return
 
 def tleStorage(satName, tleLn1, tleLn2):
+    with open('tle.txt','w+',encoding='utf-8') as tle:
+        tle.write(satName + '\n')
+        tle.write(tleLn1 + '\n')
+        tle.write(tleLn2 + '\n')
+    predict = subprocess.Popen(args = 'predict', shell = True,stdin = subprocess.PIPE, stdout = subprocess.PIPE)
+    predict.communicate('U')
+    predict.wait(2)
+    predict.communicate('~/radio/tle.txt')
+    predict.wait(2)
+    predict.kill()
     return
 
 def timeCorrection(time):
