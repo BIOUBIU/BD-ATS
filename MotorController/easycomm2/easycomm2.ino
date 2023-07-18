@@ -1,22 +1,6 @@
 /*
-欢迎使用OpenATS自动追踪天线（Open Auto Tracking System）
 
-(WXtrack控制软件）
-
-需要的硬件：
-  电脑一台，用来运行WXtrack卫星跟踪软件。
-  Arduino，山寨或者正版都可以，正版可以购买Genuino，分Nano和Mega等版本，建议Mega，拥有更好的处理能力和内存，并且以后扩展好。国内正版版本大概140元左右。Nano大概80左右，山寨30-50左右。山寨也正常，我的实验平台就是在山寨上运行的
-  步进电机2个，最好用57步进电机，扭距选择大一些的，2.0Nm以上最好，当然还可以通过减速机来增大扭矩。
-  步进电机驱动器2个，分别控制步进电机的。1套驱动器配1个步进电机，57步进套装在200-300左右，当然可以淘二手的。
-  24V开关电源一个，工业上用的即可，淘宝很多，具体功率要根据你两个步进电机的功率之和来决定。如果选57大功率的步进电机的话，就要选择最少10A以上的电源
-。
-  再一个不起眼但很重要的，XY轴可以旋转的支架。这个不好购买，可以自己制作，成本不太好估计。
-  如果不算支架的话，仅需要几百块钱就可以完成所实现的功能，加上支架成本，不到2k应该足够了。具体看你用没用减速机还有支架配件等等，有的配件，我们身边都有。
-
-
-搭建过程：
-
-所有程序和代码，已经分享到我的百度网盘，链接:https://pan.baidu.com/s/1sliIPJJ 密码:pdx2 链接:https://pan.baidu.com/s/1dZcN3S 密码:7sxy https://pan.baidu.com/s/1nvtFfTJ 解压密码：1024
+**本代码改自OpenATS项目
 
 
 1，把Arduino驱动程序arduino-1.6.8-windows.exe和虚拟串口驱动CH341SER.EXE下载安装，把AccelStepper库下载解压缩，解压缩后的整个AccelStepper文件夹拷贝到安装后Arduino程序的libraries文件夹下
@@ -156,62 +140,17 @@ void setup()
    
    stepper1.setAcceleration(ACCELERATION_1);
    stepper2.setAcceleration(ACCELERATION_2);
-   
 
-   //stepper1.setSpeed(8000.0);
-   //stepper2.setSpeed(8000.0);
   
    Serial.begin(9600);
    
-   Serial.println("++++++++++++++++++++++++++++++++++++++++++++++++++++");
-   Serial.println("+    The Open Auto Tracking System is online !     +");
-   Serial.println("+                   (WXtrack)                      +");
-   Serial.println("+        Use 'XX YY' to control the antenna        +");
-   Serial.println("+               XX is AZ, YY is EL                 +");
-   Serial.println("+           Like this : 35.56 45.23                +");
-   Serial.println("+          Send '0' or space to back home          +"); 
-   Serial.println("+          Send 'W' to wakeup the antenna          +"); 
-   Serial.println("+         Send 'S' to shutdown the antenna         +"); 
-   Serial.println("+   Send 'X 52.4' will set 52.4 angle to AZ's 0    +");
-   Serial.println("+   Send 'Y 30.6' will set 30.6 angle to EL's 0    +");
-   Serial.println("+                 GOOD LUCK !!!                    +");
-   Serial.println("+--------------------------------------------------+");
- //Serial.println("+        ____      _    ____ ___ _____ _           +");
- //Serial.println("+       |  _ \    / \  / ___|_ _| ____| |          +");
- //Serial.println("+       | |_) |  / _ \ \___ \| ||  _| | |          +");
- //Serial.println("+       |  _ <  / ___ \ ___) | || |___| |___       +");
- //Serial.println("+       |_| \_\/_/   \_\____/___|_____|_____|      +");
-   Serial.println("+                  Version 2.0                     +");
-   Serial.println("+--------------------------------------------------+");
-   Serial.println("++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
    
 }
-//////////////////////////////////////////////////////////////////////////////////////////
-/*   static int antennapower(struct pt *pt) 
-     {  
-      PT_BEGIN(pt);  
-      while(1) 
-        {  
-         if( power == 1 )
-           {             
-              digitalWrite(2,HIGH);            
-           } 
-         else
-           {
-              //delay(6000); 
-              digitalWrite(2,LOW);
-           }
-       } 
-      PT_END(pt); 
-    }
-*/ 
-//////////////////////////////////////////////////////////////////////////////////////////
 
 void loop()                                          //主程序循环
 {
 
-//starttime = millis();                                //计算程序循环一次耗时
-//power(&pt2);
 //下面为初始化各种变量，请勿移动位置
 char a[10]={0};
 char b[10]={0};
@@ -219,10 +158,6 @@ char c[10]={0};
 char d[10]={0};
 char e[10]={0};
 char f[10]={0};
-//char g[10]={0};
-//char h[10]={0};
-//char i[10]={0};
-//char j[10]={0};
 
 String tmp_a = "";
 String tmp_b = "";
@@ -230,10 +165,6 @@ String tmp_c = "";
 String tmp_d = "";
 String tmp_e = "";
 String tmp_f = "";
-//String tmp_g = "";
-//String tmp_h = "";
-//String tmp_i = "";
-//String tmp_j = "";
 String usbdata = "";
 
 
@@ -472,42 +403,3 @@ if ( power_tmp == 0 && power == 0)
       delay (2000);      
    }
 }
-//loop循环函数结束
-/*
-if ( power == 1 && power_tmp == 0)
-   {
-      digitalWrite(power1Pin, LOW);
-      delay (2000); 
-   }
-*/
-//antennapower(&pt1);                                               //执行线程1
-//xxxxxxxxxxxx(&pt2);                                               //执行线程1
-  
-
-
-
-/* 
-static int protothread1(struct pt *pt) 
-{  
-  PT_BEGIN(pt);  
-  while(power == 0) 
-  {  
-    delay(6000); 
-    digitalWrite(12,LOW); 
-  } 
-  PT_END(pt); 
-}
-//外部中断程序
-/*
-void （power1）
-  {
-    delay(6000);
-    digitalWrite(power1Pin, LOW);    
-  }
-  void (power2)
-
-  {
-    
-  }
-//整个程序结束
-*/

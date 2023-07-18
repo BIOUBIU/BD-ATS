@@ -116,7 +116,11 @@ def timeCorrection(time):
     return
 
 
-def info():#######################
+def info():
+    with open('last.log','r',encoding='utf-8') as inf:
+        log = inf.read()
+    log = 'MSG,2,' + log + '$'
+    serCmd.write(log)
     return
 
 def superdo(command):
@@ -169,8 +173,8 @@ if __name__ == '__main__':
                     task(bufList[1], bufList[2], bufList[3], bufList[4], bufList[5], bufList[6])
                 elif(bufList[0] == 'TLE'):
                     tleStorage(bufList[1], bufList[2], bufList[3])
-                #elif(bufList[0] == 'INF'):
-                #    info()
+                elif(bufList[0] == 'INF'):
+                    info()
                 elif(bufList[0] == 'SUP'):
                     superdo(bufList[1])
                 else:
