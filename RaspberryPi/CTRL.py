@@ -48,7 +48,20 @@ def createDoppler(satName, freq, startTime):
             dp.write(oneLine)
     return unixStartTime
 
-def taskArrange(satName, mode, sideband, freq, startTime, endTime):
+def telemetryDecode(satName, startTime):
+    cmd = 'gr_satellites ' +  satName + ' --wavfile ~/radio/recording/recording.wav'
+    grsat = subprocess.Popen(args = cmd, shell = True, stdin = subprocess.PIPE, stdout = subprocess.PIPE)
+    grsat.wait()
+    out = grsat.stdout.read()
+    fileName = startTime + '.txt'
+    with open(fileName,'w+',encoding='utf-8') as tm:
+        tm.write(out)
+    summary = 'MSG,3,' + out[0:out.find('ListContainer')] + '$'
+    serCmd.write(summary)
+    grsat.kill()
+    return
+
+def task(satName, mode, sideband, freq, startTime, endTime):
     st = datetime.datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S")
     unixST = st.timestamp()
     et = datetime.datetime.strptime(endTime, "%Y-%m-%d %H:%M:%S")
@@ -59,7 +72,7 @@ def taskArrange(satName, mode, sideband, freq, startTime, endTime):
     predict = subprocess.Popen(args = cmd1, shell = True,stdin = subprocess.PIPE, stdout = subprocess.PIPE)
     predict.wait(5)
     predict.communicate('T')
-    satlist = np.load('/radio/SatList.npy').item()
+    satlist = np.load('~/radio/SatList.npy').item()
     predict.communicate(satlist[satName])
     while(time.time() <= unixST):
         time.sleep(0.5)
@@ -69,20 +82,22 @@ def taskArrange(satName, mode, sideband, freq, startTime, endTime):
     if(mode == 'WBFM'):
         WBFM.main()
     predict.kill()
+    telemetryDecode(satName, startTime)
     return
 
 def tleStorage(satName, tleLn1, tleLn2):
     return
 
-def timeCorrection(time):  #####ok
+def timeCorrection(time):
     cmd = "date -s '%s'" % (time)
     os.system(cmd)
     os.system('hwclock -w')
     return
 
+'''
 def info():#######################
     return
-
+'''
 def superdo(command):
     os.system(command)
     return
@@ -92,7 +107,7 @@ def superdo(command):
 """
 def REPRequest():
     global serCmd, buf, bufList, serUSB
-    serCmd.write(b"REP,timeRequest\n")
+    serCmd.write("REP,timeRequest\n")   #b前缀去掉了
     while(serCmd.in_waiting() == 0):
         pass
     buf = serCmd.read_until()
@@ -101,13 +116,13 @@ def REPRequest():
         timeCorrection(bufList[1])
     else:
         raise
-    serCmd.write(b"REP,taskRequest\n")
+    serCmd.write("REP,taskRequest\n")
     while(serCmd.in_waiting() == 0):
         pass
     buf = serCmd.read_until()
     bufList = buf.split(',')
     if(bufList[0] == 'TSK'):
-        taskArrange(bufList[1], bufList[2], bufList[3], bufList[4], bufList[5], bufList[6])#1：名称 2：调制 3：边带 4：中心频点（Hz） 5：唤醒 6:结束时间    
+        task(bufList[1], bufList[2], bufList[3], bufList[4], bufList[5], bufList[6])#1：名称 2：调制 3：边带 4：中心频点（Hz） 5：唤醒 6:结束时间    
     else:
         raise
     return
@@ -127,7 +142,7 @@ if __name__ == '__main__':
                 buf = serCmd.read_until()
                 bufList = buf.split(',')
                 if(bufList[0] == 'TSK'):
-                    taskArrange(bufList[1], bufList[2], bufList[3], bufList[4], bufList[5], bufList[6])
+                    task(bufList[1], bufList[2], bufList[3], bufList[4], bufList[5], bufList[6])
                 elif(bufList[0] == 'TLE'):
                     tleStorage(bufList[1], bufList[2], bufList[3])
                 #elif(bufList[0] == 'INF'):
@@ -138,6 +153,7 @@ if __name__ == '__main__':
                     raise
 
     except Exception:
-        serCmd.write(b"MSG,An error has occured in CTRL.py")
+        serCmd.write("MSG,A FATAL error has occured in CTRL.py, please restart Pi through ESP32")
         destory()
+        os.system('shutdown')
 
