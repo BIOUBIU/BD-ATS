@@ -186,7 +186,7 @@ String usbdata = "";
 
 
 //自动追踪开始
- if ( usbdata.length() > 4 &&　usbdata.startsWith("A")　)
+ if ( usbdata.length() > 4 && usbdata.startsWith("A") )
    {
       const char *usb=usbdata.c_str();                               //将string数据转成字符串数据
       //Serial.println(usb);
@@ -320,7 +320,7 @@ String usbdata = "";
       if (X < 400 && X > -450)                                   //手动控制时，进行角度限制。
        {        
           gotoangle_x = X;
-          Serial.print("AZ= %.2f", X);
+          //Serial.print("AZ= %.2f", X);
        }
       else
        {
@@ -329,7 +329,7 @@ String usbdata = "";
       if (Y > -20 && Y < 100)       
        {
           gotoangle_y = Y;
-          Serial.print("EL= %.2f", Y);
+          //Serial.print("EL= %.2f", Y);
        }
       else
        {
