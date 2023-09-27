@@ -130,7 +130,33 @@ def demo():
     time.sleep(1)
     serCmd.write("AZ172.0 EL0.0".encode('utf-8'))
     time.sleep(1)
-    time.sleep(5)
+    time.sleep(6)
+    serCmd.write("MSG,3,Realtime telemetry: \n Container: \n eps = Contain $".encode('utf-8'))
+    serCmd.write("MSG,3,er: \n photovoltage = ListContainer: 0 0 0 \n phot $".encode('utf-8'))
+    serCmd.write("MSG,3,ocurrent = 0 \n batteryvoltage = 8140 \n systemcur $".encode('utf-8'))
+    serCmd.write("MSG,3,rent = 206 \nrebootcount = 721  \n softwareerrors  $".encode('utf-8'))
+    serCmd.write("MSG,3,tterytemp = 9 \n latchupcount5v = 0 \n latchupcoun $".encode('utf-8'))
+    serCmd.write("MSG,3,t3v3 = 0 \n resetcause = 5 \n MPPTmode = 1 \n bob  $".encode('utf-8'))
+    serCmd.write("MSG,3,= Container: \n sunsensor = ListContainer: 4 4 4\n $".encode('utf-8'))
+    serCmd.write("MSG,3,paneltempX+ = -10.710499999999996 \n paneltempX- = $".encode('utf-8'))
+    serCmd.write("MSG,3,-8.037900000000008 \n paneltempY+ = -8.46199999999 $".encode('utf-8'))
+    serCmd.write("MSG,3,9989 \n paneltempY- = -8.5411 \n 3v3voltage = 3280 $".encode('utf-8'))
+    serCmd.write("MSG,3,3v3current = 143 \n 5voltage = 4962 \n rf = Contai $".encode('utf-8'))
+    serCmd.write("MSG,3,ner:  \n rxdoppler = 160 \n rxrssi = 181 \n temp = $".encode('utf-8'))
+    serCmd.write("MSG,3,10.274000000000001 \n rxcurrent = 24.8040000000000 $".encode('utf-8'))
+    serCmd.write("MSG,3,02 \n tx3v3current = 43.884 \n tx5vcurrent = 35.61 $".encode('utf-8'))
+    serCmd.write("MSG,3,6 \n pa = Container:  \n revpwr = 107.603005479388 $".encode('utf-8'))
+    serCmd.write("MSG,3,07 \n fwdpwr = 211.90109208975545 \n boardtemp = 1 $".encode('utf-8'))
+    serCmd.write("MSG,3,66 \n boardcurr = 83.8843 \n ants = Container:  \n $".encode('utf-8'))
+    serCmd.write("MSG,3,temp = ListContainer: 169 169 \n deployment = List $".encode('utf-8'))
+    serCmd.write("MSG,3,Container: True True True True \nsw = Container:\n $".encode('utf-8'))
+    serCmd.write("MSG,3,seqnumber = 2543 \n dtmfcmdcount = 40 \n dtmflastc $".encode('utf-8'))
+    serCmd.write("MSG,3,md = 0 \n dtmfcmdsuccess = True \n datavalid = Lis $".encode('utf-8'))
+    serCmd.write("MSG,3,tContainer: True True True True True True True \n  $".encode('utf-8'))
+    serCmd.write("MSG,3,eclipse = True \n safemode = False \n hwabf = True $".encode('utf-8'))
+    serCmd.write("MSG,3,\n swabf = False \n deploymentwait = False $".encode('utf-8'))
+    return   
+    """
     cmd = 'gr_satellites AO-73 --wavfile ~/radio/recording/ao73.wav'
     grsat = subprocess.Popen(args = cmd, shell = True, stdin = subprocess.PIPE, stdout = subprocess.PIPE)
     grsat.wait()
@@ -141,7 +167,8 @@ def demo():
     summary = 'MSG,3,' + out[0:out.find('ListContainer')] + '$'
     serCmd.write(summary)
     grsat.kill()
-    return
+    """
+
 
 def task(satName, mode, sideband, freq, startTime, endTime):
     ########
@@ -221,6 +248,8 @@ def REPRequest():
     else:
         raise
     serCmd.write("REP,taskRequest\n")
+    demo()
+    '''
     while(serCmd.in_waiting() == 0):
         pass
     buf = serCmd.read_until()
@@ -231,6 +260,7 @@ def REPRequest():
         info()
     else:
         raise
+    '''
     return
 
 def destory():
@@ -244,6 +274,7 @@ if __name__ == '__main__':
         logging.basicConfig(filename="last.log", filemode="w+", format="%(asctime)s %(name)s:%(levelname)s:%(message)s", datefmt="%d-%M-%Y %H:%M:%S", level=logging.DEBUG)
         setupSerial()
         REPRequest()
+        #demo()
         while True:
             if (serCmd.in_waiting() != 0):
                 buf = serCmd.read_until()
