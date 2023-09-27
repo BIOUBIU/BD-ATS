@@ -12,7 +12,7 @@ import logging
 import numpy as np
 
 serCmd = serial.Serial("/dev/ttyAMA1", 9600, timeout = 10)
-serUSB = serial.Serial("/dev/ttyUSB0", 9600, timeout = 10)#######################
+serUSB = serial.Serial("/dev/ttyACM0", 9600, timeout = 10)#######################
 
 buf = 'buf'
 bufList = ['0']
